@@ -23,7 +23,12 @@ export default class DownloadButton {
     }
 
     eventHandler (event) {
-        const newTab = window.open(this.scope[this.prop], '_blank');
-        newTab.focus();
+        const data = this.scope[this.prop];
+        const win = window.open();
+        if (data.startsWith('data:image')) {
+            win.document.write(`<img src="${data}" />`);
+        } else {
+            win.document.write(data);
+        }
     }
 }
