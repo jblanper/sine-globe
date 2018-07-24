@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sine-globe</title>
+  <style type="text/css">
+  body {
+      margin: 0;
+      font: 12px sans-serif;
+      overflow: hidden; 
+  }
+  * { box-sizing: border-box; }
+
+  canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+  }
+
+  #menu, #ui {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+  }
+
+  #menu {
+      margin: 1em;
+  }
+
+  #menu:hover circle{
+      fill: rgb(152, 54, 38);
+  }
+
+  #menu:hover rect {
+      fill: #fff;
+  }
+
+  #ui {
+      z-index: 10;
+      text-align: left;
+      margin: 0;
+      width: 240px;
+      background-color: #fff;
+      transition: all 300ms ease-in;
+      overflow-y: auto;
+      overflow-x: hidden;
+  }
+
+  .moverIzq {
+      transform: translateX(-100%);
+  }
+
+  #ui > *  {
+      margin: 0 auto 1ex auto;
+      font-weight: 700;
+      width: 180px;
+  }
+
+  #ui #description {
+      font-size: 110%;
+      font-weight: 100;
+  }
+
+  #ui #description h1 {
+      font-size: 160%;
+      font-weight: 100;
+  }
+
+  #ui button, #ui .file-btn, #ui #close {
+      font-size: 13.3px;
+      padding: 1ex;
+      display: block;
+      background-color: #fff;
+      border: 2px solid #000;
+  }
+
+  #ui .toggle {
+      color: green;
+      border-color: green;
+  }
+
+  #ui .deactivated {
+      color: rgb(152, 54, 38);
+      border-color: rgb(152, 54, 38);
+  }
+
+  #ui #close {
+      width: auto;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      font-weight: 100;
+      color: rgb(152, 54, 38);
+      background-color: #fff;
+      border: none;
+  }
+
+  #ui button:hover, #ui .file-btn:hover {
+      background-color: #000;
+      color: #fff;
+      border-color: #fff;
+  }
+
+  #ui .toggle:hover {
+      background-color: green;
+  }
+
+  #ui .deactivated:hover {
+      background-color: rgb(152, 54, 38);
+  }
+
+  #ui #close:hover {
+      background-color: #fff;
+      color: #000;
+      border: none;
+  }
+
+  #ui .slider {
+      padding: 0;
+  }
+
+  #ui .slider input {
+      margin: 1ex 0 0 0;
+      width: 180px;
+  }
+
+  #ui hr {
+      border: none;
+      border-top: 2px dotted rgb(152, 54, 38);
+      margin-top: 15px;
+      margin-bottom: 15px;
+      height: 5px;
+  }
+
+  /*remove style from input file*/
+  #ui .file-btn {
+      position: relative;
+      text-align: center;
+  }
+
+  #ui input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      overflow: hidden;
+  }
+
+  #ui > :last-child { margin-bottom: 40px; }
+  </style>
+</head>
+<body>
+  <canvas></canvas>
+  </div>
+  <script>
+!function(t){var e={};function s(i){if(e[i])return e[i].exports;var n=e[i]={i:i,l:!1,exports:{}};return t[i].call(n.exports,n,n.exports,s),n.l=!0,n.exports}s.m=t,s.c=e,s.d=function(t,e,i){s.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},s.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},s.t=function(t,e){if(1&e&&(t=s(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(s.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)s.d(i,n,function(e){return t[e]}.bind(null,n));return i},s.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return s.d(e,"a",e),e},s.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},s.p="",s(s.s=0)}([function(t,e,s){"use strict";s.r(e);class i{constructor(t,e){this.x=t,this.y=e}static fromPolar(t,e,s=e){const i=e*Math.cos(t),n=s*Math.sin(t);return new this(Math.floor(i),Math.floor(n))}static add(t,e){return new this(t.x+e.x,t.y+e.y)}static sub(t,e){return new this(t.x-e.x,t.y-e.y)}static eq(t,e){return t.x===e.x&&t.y===e.y}add(t){return this.x+=t.x,this.y+=t.y,this}addX(t){return this.x+=t,this}addY(t){return this.y+=t,this}sub(t){return this.x-=t.x,this.y-=t.y,this}subX(t){return this.x-=t,this}subY(t){return this.y-=t,this}mul(t){return this.x=this.x*t,this.y=this.y*t,this}div(t){if(0!==t)return this.x=this.x/t,this.y=this.y/t,this}get magnitude(){return Math.hypot(this.x,this.y)}normalize(){const t=this.getMagnitude();return this.div(t),this}getDistance(t){const e=t.x-this.x,s=t.y-this.y;return Math.hypot(e,s)}getAngle(t){return Math.atan2(t.y-this.y,t.x-this.x)}eq(t){return this.x===t.x&&this.y===t.y}quasiEq(t){return Math.abs(this.x-t.x)<=1&&this.y===t.y||this.x===t.x&&Math.abs(this.y-t.y)<=1}copy(){return new i(this.x,this.y)}}class n{constructor({angleVel:t,center:e,radiusX:s,radiusY:i,layerNum:n,modifiers:r}){this._angleVel=t,this._center=e,this._radiusX=s,this._radiusY=i,this._layerNum=n,this._modifiers=r,this._outlinePointsNum=Math.floor(2*Math.PI/t),this._outline=this._getOutline()}modifyParams({center:t,radiusX:e,radiusY:s}){this._center=t,this._radiusX=e,this._radiusY=s,this._getOutline()}_getOutlinePoint(t){const e=this._angleVel*t,s=this._modifiers.modifyEllipseRadius(this._radiusX,e,t,this._layerNum),n=this._modifiers.modifyEllipseRadius(this._radiusY,e,t,this._layerNum),r=i.fromPolar(e,s,n).add(this._center);return this._modifiers.modifyOutlinePoint(r,this._radiusX,e,t,this._layerNum)}_getOutline(){this._outline=Array.from({length:this._outlinePointsNum},(t,e)=>this._getOutlinePoint(e))}plot(t,e=0){t.strokeStyle=this._modifiers.setColor(e),t.lineWidth=this._modifiers.setLineWidth(e),t.beginPath(),t.moveTo(this._outline[0].x,this._outline[0].y),this._outline.forEach(e=>{t.lineTo(e.x,e.y)}),t.lineTo(this._outline[0].x,this._outline[0].y),t.stroke()}}class r{constructor({center:t,radius:e,radiusOffset:s=0,layersNum:i,angleVel:n,modifiers:r}){this._radiusX=e.x,this._radiusY=e.y,this._radiusOffset=s,this._center=t,this._layersNum=i,this._angleVel=n,this._modifiers=r,this._sep=2*this._radiusY/this._layersNum,this._initialLayersParams=this._setLayersParams(),this._layers=this._setLayers()}getSphereRect(){return[this._center.x-this._radiusX-250,this._center.y-this._radiusY-250,2*this._radiusX+500,2*this._radiusY+500]}_getLayerCenter(t){return new i(this._center.x,this._center.y+this._radiusY-t*this._sep)}_getLayerRadius(t){const e=Math.PI/this._layersNum*t,s=i.fromPolar(e,this._radiusY,this._radiusX).sub(new i(this._radiusY-t*this._sep,0)).magnitude+this._radiusOffset;return this._modifiers.modifyLayerRadius(s,e,t)}_setLayersParams(){return Array.from({length:this._layersNum},(t,e)=>({center:this._getLayerCenter(e),radius:this._getLayerRadius(e)}))}_setLayers(){return this._initialLayersParams.map((t,e)=>new n({angleVel:this._angleVel,center:t.center,radiusX:t.radius,radiusY:t.radius*this._modifiers.modifySmallRadius(e),layerNum:e,modifiers:this._modifiers}))}modifyLayers({plotting:t=!1,ctx:e,setColor:s,setLineWidth:i}={}){this._setLayersParams().forEach((s,i)=>{this._layers[i].modifyParams({center:s.center,radiusX:s.radius,radiusY:s.radius*this._modifiers.modifySmallRadius(i)}),t&&this._layers[i].plot(e,i)})}}class a{constructor({type:t="sin",A:e,B:s,C:i=0,D:n=0,maxR:r=0}){this.type=t,this.A=e,this.B=s,this.C=i,this.D=n,this.maxR=r,this.orig={A:e,B:s,C:i,D:n}}getPoint(t){return this.A*Math[this.type](this.B*t+this.C)+this.D}scaleA(t){this.A=this.orig.A*t/this.maxR}reset(...t){t.length>0?t.forEach(t=>this[t]=this.orig[t]):({A:this.A,B:this.B,C:this.C,D:this.D}=this.orig)}}class h{constructor(t){this.waves=t.waves.map(e=>new a(Object.assign(e,{maxR:t.sphere.radius.x}))),this.layersNum=t.sphere.layersNum,this.hue=t.modifiers.hue,this.nsIncr=t.modifiers.nsIncrements,this.ns=[0,0,0]}update(){this.ns=this.ns.map((t,e)=>t+this.nsIncr[e]),this.waves[0].C+=this.nsIncr[0]}modifySmallRadius(){return.8}modifyLayerRadius(t,e,s){return this.waves[1].reset(),this.waves[1].scaleA(t),this.waves[1].C+=e*Math.sin(this.ns[1]),t+this.waves[1].getPoint(e)}modifyEllipseRadius(t,e,s,i){return this.waves[0].reset("A","B"),this.waves[0].scaleA(t),t+this.waves[0].getPoint(e)}modifyOutlinePoint(t,e,s,n,r){return this.waves[2].reset(),this.waves[2].scaleA(e),this.waves[2].C+=.01*r*Math.sin(this.ns[2]),t.add(new i(this.waves[2].getPoint(s),this.waves[2].getPoint(.1*n)))}setColor(t){return`hsl(${this.hue+t}, 60%, 70%)`}setLineWidth(t){return t/this.layersNum}}function o(t,e){const s=document.createElementNS("http://www.w3.org/2000/svg",t);return Object.entries(e).forEach(t=>{s.setAttribute(t[0],t[1])}),s}class d{constructor({scope:t,shouldDraw:e=!0,shouldUpdate:s=!0,hasMenuBtn:i=!0}){this.reset(),this.scope=t,this.shouldUpdate=s,this.shouldDraw=e,this.hasMenuBtn=i,this.menu=Object.assign(document.createElement("div"),{id:"ui"}),this.closeBtn=Object.assign(document.createElement("button"),{textContent:"[ close ]",id:"close"}),this.render(),this.eventListener()}reset(){const t=document.querySelector("#ui");t&&t.parentNode.removeChild(t)}addSeparator(){const t=document.createElement("hr");this.menu.appendChild(t)}render(){if(this.hasMenuBtn){this.svg=o("svg",{width:45,height:45,id:"menu"});const t=o("circle",{cx:22.5,cy:22.5,r:22.5,fill:"#fff"});this.svg.appendChild(t);const e=o("rect",{x:10,y:10,width:25,height:5,fill:"#000"});this.svg.appendChild(e);const s=o("rect",{x:10,y:20,width:25,height:5,fill:"#000"});this.svg.appendChild(s);const i=o("rect",{x:10,y:30,width:25,height:5,fill:"#000"});this.svg.appendChild(i),document.body.appendChild(this.svg),this.menu.classList.add("moverIzq")}this.menu.appendChild(this.closeBtn),document.body.appendChild(this.menu)}eventListener(){this.hasMenuBtn&&this.svg.addEventListener("click",this.openEventHandler.bind(this),{once:!0}),this.menu.addEventListener("change",this.updateEventhandler.bind(this)),this.menu.addEventListener("click",this.updateEventhandler.bind(this))}openEventHandler(t){this.menu.classList.remove("moverIzq"),this.closeBtn.addEventListener("click",this.closeEventHandler.bind(this),{once:!0})}closeEventHandler(t){this.menu.classList.add("moverIzq"),t.stopPropagation(),this.svg.addEventListener("click",this.openEventHandler.bind(this),{once:!0})}updateEventhandler(t){("change"===t.type&&"range"===t.target.type||"click"===t.type&&"BUTTON"===t.target.nodeName)&&(this.shouldUpdate&&this.scope.update(),this.shouldDraw&&this.scope.draw())}}class u{constructor({text:t,scope:e,prop:s}){this.scope=e,this.prop=s,this.btn=Object.assign(document.createElement("button"),{textContent:t}),this.render(),this.eventListener()}render(){document.querySelector("#ui").appendChild(this.btn)}eventListener(){this.btn.addEventListener("click",this.eventHandler.bind(this))}eventHandler(t){window.open(this.scope[this.prop],"_blank").focus()}}class l{constructor({playText:t,stopText:e,scope:s}){this.playText=t,this.stopText=e,this.animate=function(t,e=0){let s,i=!1;const n=function(t){let e=0,s=0;const i=t;return t=>{let n=t-e;if(e=t,(s+=n)>i)return s=0,!0}}(e),r=t=>{i||(i=!0),s=window.requestAnimationFrame(h)},a=t=>{s&&(window.cancelAnimationFrame(s),s=void 0,i=!1)},h=(e=0)=>{n(e)&&t(),r()};return{start:r,stop:a,toggle:t=>{(i=!i)?r():a()},get animating(){return i}}}(t=>{s.draw(),s.update()}),this.btn=Object.assign(document.createElement("button"),{textContent:t,id:"play"}),this.btn.classList.add("toggle"),this.render(),this.eventListener()}render(){document.querySelector("#ui").appendChild(this.btn)}eventListener(){this.btn.addEventListener("click",this.eventHandler.bind(this))}eventHandler(t){this.animate.toggle(),this.btn.classList.toggle("deactivated"),this.btn.textContent=this.animate.animating?this.stopText:this.playText,t.stopPropagation()}}class c{constructor({max:t,min:e,step:s=1,scope:i,prop:n,label:r}){this.scope=i,this.prop=n,this.label=r||n,this.slider=Object.assign(document.createElement("input"),{type:"range",value:i[n],max:t,min:e,step:s,id:this.label.replace(/\s/g,"-")}),this.output=document.createElement("output"),this.output.textContent=i[n],this.render(),this.eventListener()}render(){const t=document.querySelector("#ui"),e=document.createDocumentFragment(),s=document.createElement("div");s.classList.add("slider");const i=Object.assign(document.createElement("label"),{textContent:`${this.label} — `,for:this.slider.id}),n=document.createElement("br");e.appendChild(s),s.appendChild(i),s.appendChild(this.output),s.appendChild(n),s.appendChild(this.slider),t.appendChild(e)}eventListener(){this.slider.addEventListener("input",this.eventHandler.bind(this))}eventHandler(t){const e=this.slider.valueAsNumber;this.output.textContent=e,this.scope[this.prop]=e}}class p{constructor(t,e){this.title=t,this.text=e,this.render()}render(){const t=document.querySelector("#ui"),e=document.createElement("div");e.id="description";const s=document.createElement("h1");s.textContent=this.title,e.appendChild(s),this.text.forEach(t=>{const s=document.createElement("p");s.textContent=t,e.appendChild(s)}),t.appendChild(e)}}class m{constructor(t){this._ctx=t}init(t){this._backgroundColor=t.backgroundColor,this.modifiers=new h(t),this._sphere=new r({center:new i(this._ctx.canvas.width/2,this._ctx.canvas.height/2),radius:new i(t.sphere.radius.x,t.sphere.radius.y),radiusOffset:t.sphere.radiusOffset,layersNum:t.sphere.layersNum,angleVel:t.sphere.angleVel,modifiers:this.modifiers}),this.setBindings(t.sliders),this.draw()}setBindings(t){this.menu=new d({scope:this,shouldUpdate:!1}),this.description=new p("Sine-globe",["Blob formed by ellipses made of sine waves.",'Press "play" to begin the animation. Every "wave" frequency and amplitude             can be tweaked. The last slider changes the hue. Enjoy!']),this.menu.addSeparator(),this.playBtn=new l({playText:"play",stopText:"stop",scope:this}),this.getImgBtn=new u({text:"get IMG",scope:this,prop:"png"}),this.menu.addSeparator(),this.sliders=[],this.modifiers.waves.forEach((e,s)=>{this.sliders.push(new c({label:`Wave ${s} amp`,prop:"A",scope:this.modifiers.waves[s].orig,max:t.waveA.max,min:t.waveA.min,step:t.waveA.step})),this.sliders.push(new c({label:`Wave ${s} freq`,prop:"B",scope:this.modifiers.waves[s].orig,max:t.waveB.max,min:t.waveB.min,step:t.waveB.step})),this.sliders.push(new c({label:`Wave ${s} N incr`,prop:s,scope:this.modifiers.nsIncr,max:t.nIncr.max,min:t.nIncr.min,step:t.nIncr.step})),this.menu.addSeparator()}),this.sliders.push(new c({prop:"hue",scope:this.modifiers,max:t.hue.max,min:t.hue.min,step:t.hue.step}))}get png(){const t=Object.assign(document.createElement("canvas"),{width:this._ctx.canvas.width,height:this._ctx.canvas.height}).getContext("2d");return t.drawImage(this._ctx.canvas,0,0),t.canvas.toDataURL("image/png")}clear(t=[0,0,this._ctx.canvas.width,this._ctx.canvas.height]){this._ctx.fillStyle=this._backgroundColor,this._ctx.fillRect(...t)}draw(){this.clear(),this._sphere.modifyLayers({plotting:!0,ctx:this._ctx})}update(){this.modifiers.update()}}const y={backgroundColor:"#000",sphere:{radius:{x:150,y:200},radiusOffset:0,layersNum:150,angleVel:.08},waves:[{type:"sin",A:15,B:5,C:0,D:0},{type:"sin",A:10,B:8,C:0,D:0},{type:"sin",A:8,B:3,C:0,D:0}],modifiers:{nsIncrements:[.02,.02,.05],hue:170},sliders:{waveA:{max:100,min:.1,step:.1},waveB:{max:50,min:.01,step:.01},nIncr:{max:.2,min:0,step:1e-4},hue:{max:300,min:1,step:1}}};!function(){const t=document.querySelector("canvas");t.width=window.innerWidth,t.height=window.innerHeight;const e=t.getContext("2d");new m(e).init(y)}()}]);
+  </script>
+</body>
+</html>
