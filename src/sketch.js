@@ -19,7 +19,6 @@ export default class Sketch {
         this._sphere = new Sphere({
             center: new Vector(this._ctx.canvas.width / 2, this._ctx.canvas.height / 2),
             radius: new Vector(options.sphere.radius.x, options.sphere.radius.y),
-            radiusOffset: options.sphere.radiusOffset,
             layersNum: options.sphere.layersNum,
             angleVel: options.sphere.angleVel,
             modifiers: this.modifiers 
@@ -52,7 +51,21 @@ export default class Sketch {
         this.menu.addSeparator();
 
         this.sliders = [];
+        
+        // sliders for dimensions
+        this.sliders.push(
+            new Slider ({
+                label: 'number of layers',
+                prop: 'layersNum',
+                scope: this._sphere,
+                max: slidersOpt.layersNum.max,
+                min: slidersOpt.layersNum.min
+            })
+        );
 
+        this.menu.addSeparator();
+
+        // sliders for waves
         this.modifiers.waves.forEach((_, i) => {
             this.sliders.push(
                 new Slider ({
@@ -113,13 +126,13 @@ export default class Sketch {
         return cachedCanvasCtx.canvas.toDataURL('image/png');
     }
 
-    clear(options = [0, 0, this._ctx.canvas.width, this._ctx.canvas.height]) {
+    clear() {
         this._ctx.fillStyle = this._backgroundColor;
-        this._ctx.fillRect(...options);
+        this._ctx.fillRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
     }
 
     draw () {
-        this.clear()//this._sphere.getSphereRect());
+        this.clear();
         this._sphere.modifyLayers({plotting: true, ctx: this._ctx});
     }
 

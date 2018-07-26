@@ -6,9 +6,10 @@ export default class Slider {
 
         this.slider = Object.assign(
             document.createElement('input'), {
-                type: 'range', value: scope[prop],
-                max: max, min: min, step: step, id: this.label.replace(/\s/g, '-')
+                type: 'range', id: this.label.replace(/\s/g, '-'),
+                max: max, min: min, step: step
         });
+        this.slider.value = scope[prop];
 
         this.output = document.createElement('output');
         this.output.textContent = scope[prop];
