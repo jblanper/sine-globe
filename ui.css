@@ -145,4 +145,24 @@ canvas {
 	overflow: hidden;
 }
 
-#ui > :last-child { margin-bottom: 40px; }
+#ui #signature {
+    display: block;
+    text-decoration: none;
+    color: #983626;
+    text-align: center;
+    margin-top: 30px;
+    width: 50px;
+}
+
+#ui #signature svg {
+    display: block;
+    margin-top: 8px;
+}
+
+#ui #signature:hover {
+    color: #6da0bd;
+}
+
+#ui #signature:hover rect {
+    fill: #6da0bd;
+}
