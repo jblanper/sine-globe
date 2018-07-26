@@ -22,11 +22,6 @@ export default class Menu {
             {id: 'ui'}
         );
 
-        // close Btn
-        this.closeBtn = Object.assign(
-            document.createElement('button'),
-            {textContent: '[ close ]', id: 'close'}
-        );
 
         this.render();
         this.eventListener();
@@ -45,6 +40,17 @@ export default class Menu {
     addSeparator () {
         const hr = document.createElement('hr');
         this.menu.appendChild(hr);
+    }
+
+    addSignature () {
+        const signature =  `<svg width="50" height="50" version="1.1" viewBox="0 0 13.229166 13.229167" xmlns="http://www.w3.org/2000/svg"><g><rect y="-7.7716e-16" width="13.229" height="13.229" fill="#aaa" style="paint-order:normal"/><g fill="#fff"><path d="m5.7496 1.641v6.8601c0 0.75774-0.61427 1.372-1.372 1.372-0.63771 0-1.174-0.43495-1.3278-1.0245l-1.2898 1.2898c0.54581 0.87079 1.514 1.4497 2.6176 1.4497 1.7049 0 3.087-1.3821 3.087-3.0871v-6.8601z"/><path d="m8.3907 5.4141v6.1741c1.701-5e-3 3.0785-1.385 3.0785-3.0871 0-1.7021-1.3775-3.0824-3.0785-3.087z"/><path d="m8.3907 1.641v3.43c0.94414-4e-3 1.7084-0.77004 1.7084-1.715s-0.76428-1.7115-1.7084-1.715z"/></g></g></svg`
+
+        const linkGithub = Object.assign(
+            document.createElement('a'),
+            {href: 'https://github.com/jblanper', target: '_blank', id: 'signature'}
+        );
+        linkGithub.innerHTML = 'by' + signature;
+        this.menu.appendChild(linkGithub);
     }
 
     render () {
@@ -68,9 +74,15 @@ export default class Menu {
 
             document.body.appendChild(this.svg);
             this.menu.classList.add('moverIzq');
+
+            // close Btn
+            this.closeBtn = Object.assign(
+                document.createElement('button'),
+                {textContent: '[ close ]', id: 'close'}
+            );
+            this.menu.appendChild(this.closeBtn);
         }
 
-        this.menu.appendChild(this.closeBtn);
         document.body.appendChild(this.menu);
 
     }

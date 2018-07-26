@@ -112,6 +112,8 @@ export default class Sketch {
                 step: slidersOpt.hue.step
             })
         );
+
+        this.menu.addSignature();
     }
 
     get png () {
