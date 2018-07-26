@@ -2,25 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sine-globe</title>
-  <style type="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pixelator</title>
+  <link rel="stylesheet" href="ui.css" type="text/css">
+  <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font: 12px sans-serif;
     }
-    * { box-sizing: border-box; }
 
     canvas {
-      position: absolute;
+      position: fixed;
       top: 0;
+      bottom: 0;
+      right: 0;
       left: 0;
+      margin: auto;
     }
   </style>
-  <link rel="stylesheet" href="ui.css" type="text/css">
 </head>
 <body>
   <canvas></canvas>
-  </div>
   <script type="module" src="main.js"></script>
 </body>
 </html>
