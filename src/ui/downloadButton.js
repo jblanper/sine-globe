@@ -24,11 +24,14 @@ export default class DownloadButton {
 
     eventHandler (event) {
         const data = this.scope[this.prop];
-        const win = window.open();
-        if (data.startsWith('data:image')) {
-            win.document.write(`<img src="${data}" />`);
-        } else {
-            win.document.write(data);
-        }
+        const link = document.createElement('a');
+        link.style = 'display: none;';
+        link.download = (data.startsWith('data:image')) ? 'img.png' : 'img.json';
+        link.href = data;
+        console.log(data);
+
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
     }
 }

@@ -2,10 +2,6 @@ body {
     overflow: hidden; 
 }
 
-canvas {
-    border: 1px solid #ddd;
-}
-
 #menu, #ui {
     position: fixed;
     top: 0;
