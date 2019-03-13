@@ -9,15 +9,15 @@ import Description from './ui/description.js';
 
 export default class Sketch {
     constructor (ctx) {
-        this._ctx = ctx;
+        this.ctx = ctx;
     }
 
     init (options) {
-        this._backgroundColor = options.backgroundColor;
+        this.backgroundColor = options.backgroundColor;
         this.modifiers = new Modifiers(options);
 
-        this._sphere = new Sphere({
-            center: new Vector(this._ctx.canvas.width / 2, this._ctx.canvas.height / 2),
+        this.sphere = new Sphere({
+            center: new Vector(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2),
             radius: new Vector(options.sphere.radius.x, options.sphere.radius.y),
             layersNum: options.sphere.layersNum,
             angleVel: options.sphere.angleVel,
@@ -57,7 +57,7 @@ export default class Sketch {
             new Slider ({
                 label: 'number of layers',
                 prop: 'layersNum',
-                scope: this._sphere,
+                scope: this.sphere,
                 max: slidersOpt.layersNum.max,
                 min: slidersOpt.layersNum.min
             })
@@ -119,23 +119,23 @@ export default class Sketch {
     get png () {
         const cachedCanvasCtx = Object.assign(
             document.createElement('canvas'),
-            {width: this._ctx.canvas.width, height: this._ctx.canvas.height}
+            {width: this.ctx.canvas.width, height: this.ctx.canvas.height}
         ).getContext('2d');
 
         // draw both canvases into cacheCanvas
-        cachedCanvasCtx.drawImage(this._ctx.canvas, 0, 0);
+        cachedCanvasCtx.drawImage(this.ctx.canvas, 0, 0);
 
         return cachedCanvasCtx.canvas.toDataURL('image/png');
     }
 
     clear() {
-        this._ctx.fillStyle = this._backgroundColor;
-        this._ctx.fillRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
+        this.ctx.fillStyle = this.backgroundColor;
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 
     draw () {
         this.clear();
-        this._sphere.modifyLayers({plotting: true, ctx: this._ctx});
+        this.sphere.update({plotting: true, ctx: this.ctx});
     }
 
     update () {

@@ -2,56 +2,56 @@ import Vector from './vector.js';
 
 export default class Ellipse {
     constructor ({angleVel, center, radiusX, radiusY, layerNum, modifiers}) {
-        this._angleVel = angleVel;
-        this._center = center;
-        this._radiusX = radiusX;
-        this._radiusY = radiusY;
-        this._layerNum = layerNum
-        this._modifiers = modifiers;
+        this.angleVel = angleVel;
+        this.center = center;
+        this.radiusX = radiusX;
+        this.radiusY = radiusY;
+        this.layerNum = layerNum
+        this.modifiers = modifiers;
 
-        this._outlinePointsNum = Math.floor((Math.PI * 2) / angleVel);
+        this.outlinePointsNum = Math.floor((Math.PI * 2) / angleVel);
 
-        this._outline = this._getOutline();
+        this.outline;
+        this.setOutline();
     }
 
-    modifyParams ({center, radiusX, radiusY}) {
-        this._center = center;
-        this._radiusX = radiusX;
-        this._radiusY = radiusY;
+    setOutline () {
+        this.outline = Array.from({length: this.outlinePointsNum} , (_, i) => {
+            const angle = this.angleVel * i;
+            const newRadiusX = this.modifiers.modifyEllipseRadius(
+                this.radiusX, angle, i, this.layerNum
+            );
+            const newRadiusY = this.modifiers.modifyEllipseRadius(
+                this.radiusY, angle, i, this.layerNum
+            );
 
-        this._getOutline();
+            const point = Vector.fromPolar(angle, newRadiusX, newRadiusY)
+                .add(this.center)
+
+            return this.modifiers.modifyOutlinePoint(
+                point, this.radiusX, angle, i, this.layerNum
+            );
+        });
     }
+    update ({radiusX, radiusY}) {
+        this.radiusX = radiusX;
+        this.radiusY = radiusY;
 
-    _getOutlinePoint (i) {
-        const angle = this._angleVel * i;
-        const newRadiusX = this._modifiers.modifyEllipseRadius(this._radiusX, angle, i, this._layerNum);
-        const newRadiusY = this._modifiers.modifyEllipseRadius(this._radiusY, angle, i, this._layerNum);
-
-        const point = Vector.fromPolar(angle, newRadiusX, newRadiusY)
-            .add(this._center)
-
-        return this._modifiers.modifyOutlinePoint(point, this._radiusX, angle, i, this._layerNum);
-    }
-
-    _getOutline () {
-        this._outline = Array.from(
-            {length: this._outlinePointsNum},
-            (_, i) => this._getOutlinePoint(i)
-        );
+        this.setOutline();
     }
 
     plot (ctx, i = 0) {
         //setup
-        ctx.strokeStyle = this._modifiers.setColor(i);
-        ctx.lineWidth = this._modifiers.setLineWidth(i);
+        ctx.strokeStyle = this.modifiers.setColor(i);
+        ctx.lineWidth = this.modifiers.setLineWidth(i);
 
         //draw
         ctx.beginPath();
-        ctx.moveTo(this._outline[0].x, this._outline[0].y);
-        this._outline.forEach(point => {
+        ctx.moveTo(this.outline[0].x, this.outline[0].y);
+        this.outline.forEach(point => {
             ctx.lineTo(point.x, point.y);
         });
-        ctx.lineTo(this._outline[0].x, this._outline[0].y);
+        ctx.lineTo(this.outline[0].x, this.outline[0].y);
         ctx.stroke();
     }
 }

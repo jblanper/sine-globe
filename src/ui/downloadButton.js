@@ -28,7 +28,6 @@ export default class DownloadButton {
         link.style = 'display: none;';
         link.download = (data.startsWith('data:image')) ? 'img.png' : 'img.json';
         link.href = data;
-        console.log(data);
 
         document.body.appendChild(link);
         link.click();

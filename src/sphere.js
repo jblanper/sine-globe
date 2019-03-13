@@ -8,22 +8,31 @@ export default class Sphere {
         this.center = center;
         this.angleVel = angleVel;
         this.modifiers = modifiers;
-        this.layersNum = layersNum;
 
+        this.layersNum = layersNum;
         //to keep track for changes
         this.origLayerNum = layersNum;
-
         this.sep = (this.radiusY * 2) / this.layersNum;
 
-        this.initialLayersParams = this.setLayersParams();
         this.layers = this.setLayers();
     }
 
-    getLayerCenter (i) {
-        return new Vector(
-            this.center.x,
-            this.center.y + this.radiusY - (i * this.sep)
-        );
+    setLayers () {
+        return Array.from({length: this.layersNum}, (_, i) => {
+            const radius = this.getLayerRadius(i);
+
+            return  new Ellipse({
+                angleVel: this.angleVel,
+                center: new Vector(
+                    this.center.x,
+                    this.center.y + this.radiusY - (i * this.sep)
+                ),
+                radiusX: radius,
+                radiusY: radius * this.modifiers.modifySmallRadius(i),
+                layerNum: i,
+                modifiers: this.modifiers
+            });
+        });
     }
 
     getLayerRadius (i) {
@@ -36,51 +45,28 @@ export default class Sphere {
         return this.modifiers.modifyLayerRadius(radius, angle, i);
     }
 
-    setLayersParams () {
-        return Array.from(
-            {length: this.layersNum},
-            (_, i) => ({
-                center: this.getLayerCenter(i),
-                radius: this.getLayerRadius(i)
-            })
-        );
-    }
-
-    setLayers () {
-        return this.initialLayersParams.map((params, i) => {
-            return  new Ellipse({
-                angleVel: this.angleVel,
-                center: params.center,
-                radiusX: params.radius,
-                radiusY: params.radius * this.modifiers.modifySmallRadius(i),
-                layerNum: i,
-                modifiers: this.modifiers
-            });
-        });
-    }
-
     recalculateParams () {
         this.sep = (this.radiusY * 2) / this.layersNum;
-        this.initialLayersParams = this.setLayersParams();
         this.layers = this.setLayers();
 
-        // bindings
         // update the layerNum in modifiers too for strokeWidth
         this.modifiers.layersNum = this.layersNum;
     }
 
-    modifyLayers ({plotting = false, ctx, setColor, setLineWidth} = {}) {
+    update ({plotting = false, ctx, setColor, setLineWidth} = {}) {
         // number of layers has been changed by the user
         if (this.layerNum !== this.origLayerNum) this.recalculateParams();
 
-        this.setLayersParams().forEach((params, i) => {
-            this.layers[i].modifyParams({
-                center: params.center,
-                radiusX: params.radius,
-                radiusY: params.radius * this.modifiers.modifySmallRadius(i),
+        this.layers.forEach((layer, i) => {
+            const radius = this.getLayerRadius(i);
+
+            layer.update({
+                radiusX: radius,
+                radiusY: radius * this.modifiers.modifySmallRadius(i),
             });
 
-            if (plotting) this.layers[i].plot(ctx, i);
+            // for drawing
+            if (plotting) layer.plot(ctx, i);
         });
     }
 }
