@@ -31,7 +31,7 @@ export default class Sketch {
     setBindings (slidersOpt) {
         this.menu = new Menu({
             scope: this, shouldUpdate: false,
-            githubUrl: '//github.com/jblanper/floroid'
+            githubUrl: '//github.com/jblanper/sine-globe'
         });
 
          this.description = new Description(

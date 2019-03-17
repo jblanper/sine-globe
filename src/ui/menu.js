@@ -51,7 +51,7 @@ export default class Menu {
 
         const link = Object.assign(
             document.createElement('a'),
-            {href: 'https://github.com/jblanper', target: '_blank', id: 'signature'}
+            {href: '//joseblancoperales.com', target: '_blank', id: 'signature'}
         );
 
         link.innerHTML = 'by' + signature;
